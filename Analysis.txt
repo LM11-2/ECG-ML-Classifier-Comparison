@@ -1,0 +1,10 @@
+%{
+---------------------------------------------------
+NOTE: This classification is likely to be inflated
+Since all the windows in scat_features are treated as separate samples, it
+is possible for windows of the same ECG record to be in training and
+testing for a single fold.
+The model will see data that is very similar, and this could inflate the
+cross-validation accuracy.
+---------------------------------------------------
+%}
