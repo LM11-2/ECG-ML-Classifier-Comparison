@@ -1,42 +1,27 @@
 function resultsTable = displayResults(allResults)
 
-%takes cell array of results struct for each classifier
-%returns table with results ranked by accuracy
-
 numModels = numel(allResults);
-
 modelNames = cell(numModels, 1);
 testAccuracies = zeros(numModels, 1);
+macroF1Scores = zeros(numModels, 1);
 trainingTimes = zeros(numModels, 1);
 
-for i = 1:numModels
-    modelNames{i} = allResults{i}.modelName;
-    testAccuracies(i) = allResults{i}.testAccuracy;
-    trainingTimes(i) = allResults{i}.time;
+for ii = 1:numModels
+    modelNames{ii} = allResults{ii}.modelName;
+    testAccuracies(ii) = allResults{ii}.testAccuracy;
+    macroF1Scores(ii) = allResults{ii}.macroF1;
+    trainingTimes(ii) = allResults{ii}.time;
 end
 
-resultsTable = table(modelNames, testAccuracies, trainingTimes, ...
-    'VariableNames', {'Model', 'Accuracy_Percent', 'Time_Seconds'});
+resultsTable = table(modelNames, testAccuracies, macroF1Scores, trainingTimes, ...
+    VariableNames={'Model', 'Accuracy_Percent', 'Macro_F1', 'Time_Seconds'});
+resultsTable = sortrows(resultsTable, 'Macro_F1', 'descend');
 
-resultsTable = sortrows(resultsTable, 'Accuracy_Percent', 'descend');
+fprintf("\nECG CLASSIFICATION - RESULTS SUMMARY\n\n");
+disp(resultsTable)
 
-fprintf("\n");
-fprintf("╔══════════════════════════════════════════════════════════════════════════════════╗\n");
-fprintf("║                      ECG CLASSIFICATION - RESULTS SUMMARY                        ║\n");
-fprintf("╠══════════════════════════════════════════════════════════════════════════════════╣\n");
-fprintf("║  Rank  │  Model                                       │  Accuracy  │  Time       ║\n");
-fprintf("╠══════════════════════════════════════════════════════════════════════════════════╣\n");
-
-for i = 1:numModels
-    fprintf("║   %d    │  %-44s │   %6.2f%%  │  %6.2fs   ║\n", ...
-        i, resultsTable.Model{i}, resultsTable.Accuracy_Percent(i), resultsTable.Time_Seconds(i));
-end
-
-fprintf("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
-fprintf("\n");
-
-fprintf("Most Accurate Model: %s (%.2f%% accuracy)\n\n", ...
-    resultsTable.Model{1}, resultsTable.Accuracy_Percent(1));
+fprintf("Highest Macro F1 Score: %s (%.3f)\n\n", ...
+    resultsTable.Model{1}, resultsTable.Macro_F1(1));
 
 [fastestTime, fastestIndex] = min(resultsTable.Time_Seconds);
 fprintf("Fastest Model: %s (%.2f seconds)\n\n", ...

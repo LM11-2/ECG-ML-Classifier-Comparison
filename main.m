@@ -1,8 +1,8 @@
-randomSeed = 12;
-processor = ECGPreprocessor(randomSeed); %seeded for reproducability
+randomSeed = 95;
+processor = ECGPreprocessor(randomSeed); % Seeded for reproducibility
 
 %%%%%%%%%%%%%%%%%%%%  SETUP AND LOADING DATASET %%%%%%%%%%%%%%%%%%%%%%%%%%
-
+disp("Please select the folder containing the Raw ECG Signal Data");
 parentFolder = uigetdir(pwd, 'Select the Raw-Signals folder');
 
 if isequal(parentFolder, 0) || isempty(parentFolder)
@@ -12,8 +12,14 @@ end
 dbConfig = processor.createConfig({'mitdb', 'chfdb', 'nsrdb'}, [360, 250, 128], {'ARR', 'CHF', 'NSR'});
 ECGData = processor.preprocessFromFolder(parentFolder, dbConfig, 128, 65536);
 
-save('processed4test.mat', "ECGData");
-disp("Data saved to processed4test.mat")
+outputFolder = fullfile(pwd, 'Outputs');
+if ~isfolder(outputFolder)
+    mkdir(outputFolder);
+end
+
+outputFile = fullfile(outputFolder, 'processed4test.mat');
+save(outputFile, "ECGData");
+fprintf('Data saved to %s\n', outputFile);
 
 
 %%%%%% EXPLORING ECGData %%%%%%%%%%%
@@ -95,39 +101,18 @@ scat_features_test = reshape(scat_features_test, size(scat_features_test, 1) * s
 %make labels to match the number of windows
 [sequence_labels_train, sequence_labels_test] = createSequenceLabels(Nwin, trainLabels, testLabels);
 
-%Cross Validation with two analyses
-%analysis 1: 5-fold cross validation of multiclass SVM classification w/
-%quadratic kernel
 scat_features = [scat_features_train; scat_features_test];
 allLabels_scat = [sequence_labels_train; sequence_labels_test];
-rng(randomSeed); %so the results are the same each time and we can verify
-template = templateSVM(KernelFunction="polynomial", PolynomialOrder=2, KernelScale="auto", BoxConstraint=1, Standardize=true);
-classificationSVM = fitcecoc(scat_features, allLabels_scat, Learners=template, Coding="onevsone", ClassNames={'ARR'; 'CHF'; 'NSR'});
-kfoldmodel = crossval(classificationSVM, KFold=5);
-
-%compute loss + display
-predLabels = kfoldPredict(kfoldmodel);
-loss = kfoldLoss(kfoldmodel) * 100;
-predLabels = categorical(predLabels);
-confmatCV = confusionmat(allLabels_scat, predLabels)
-fprintf("The accuracy is %2.2f percent. \n", 100-loss);
-
-classes = categorical({'ARR', 'CHF', 'NSR'});
-[ClassVotes, ClassCounts] = helperMajorityVote(predLabels, [trainLabels; testLabels], classes);
-
-CVaccuracy = sum(eq(ClassVotes, categorical([trainLabels; testLabels]))) / numel([trainLabels; testLabels]) * 100;
-fprintf("True cross-validation accuracy is %2.2f percent.desc \n", CVaccuracy);
-
-MVconfmatCV = confusionmat([trainLabels; testLabels], ClassVotes);
-MVconfmatCV
-
-
+allRecordLabels = [trainLabels; testLabels];
+CVresults = groupedCrossValidation(scat_features, allLabels_scat, ...
+    allRecordLabels, Nwin, 5, randomSeed);
 
 SVMresults = SVMClassifier(scat_features_train, scat_features_test, sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'});
-RandForestresults = RandForestClassifier(scat_features_train, scat_features_test, sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'});
+RandForestresults = RandForestClassifier(scat_features_train, scat_features_test, sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'},randomSeed);
 KNNresults = KNNClassifier(scat_features_train, scat_features_test, sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'});
 NaiveBayesresults = NaiveBayesClassifier(scat_features_train, scat_features_test, sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'});
-FNNetresults = NeuralNetClassifier4(scat_features_train, scat_features_test, sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'}, randomSeed);
+FNNetresults = FeedForwardNeuralNetClassifier(scat_features_train, scat_features_test, ...
+    sequence_labels_train, testLabels, {'ARR', 'CHF', 'NSR'}, Nwin, randomSeed);
 
 resultsTable = displayResults({SVMresults, RandForestresults, KNNresults, NaiveBayesresults, FNNetresults});
 plotConfusionMatrices({SVMresults, RandForestresults, KNNresults, NaiveBayesresults, FNNetresults})

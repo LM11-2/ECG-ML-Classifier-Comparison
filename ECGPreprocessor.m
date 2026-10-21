@@ -45,8 +45,7 @@ classdef ECGPreprocessor
                 dbFolder = fullfile(rawFolder, dbName);
 
                 if ~isfolder(dbFolder)
-                    warning('Folder not found %s, Skipping...', dbFolder);
-                    continue;
+                    error('Required database folder not found: %s', dbFolder);
                 end
 
                 originalFreq = dbConfig.(dbName).freq;
@@ -58,6 +57,13 @@ classdef ECGPreprocessor
                 [data, labels] = obj.processDatabase(dbFolder, originalFreq, label, targetFreq, targetLen);
                 allData = [allData; data];
                 allLabels = [allLabels; labels];
+            end
+
+            requiredLabels = {'ARR', 'CHF', 'NSR'};
+            for ii = 1:numel(requiredLabels)
+                if ~any(strcmp(allLabels, requiredLabels{ii}))
+                    error('No usable %s samples were found after preprocessing.', requiredLabels{ii});
+                end
             end
 
             preprocessed.Data = allData;
@@ -90,10 +96,7 @@ classdef ECGPreprocessor
             records = dir(fullfile(dbFolder, '*.dat'));
 
             if isempty(records)
-                warning('No .dat files found in %s', dbFolder)
-                data = [];
-                labels = {};
-                return;
+                error('No usable records were found in %s because it contains no .dat files.', dbFolder);
             end
 
             data = [];
@@ -116,6 +119,11 @@ classdef ECGPreprocessor
                     warning('Error processing %s: %s', recordName, ME.message);
                 end
             end
+
+            if isempty(data)
+                error('No usable records were produced from %s.', dbFolder);
+            end
+
             fprintf('Processed %d records from %s\n', size(data, 1), dbFolder);
         end
 
