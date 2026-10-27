@@ -1,6 +1,6 @@
 # ECG Signal Classification with Wavelet Time Scattering
 
-> A personal student portfolio project comparing machine-learning classifiers for electrocardiogram (ECG) signal classification.
+> My personal project comparing machine-learning classifiers for electrocardiogram (ECG) signal classification.
 
 ## Overview
 
@@ -20,6 +20,7 @@ This is an independent student portfolio project that grew out of the ideas in M
 - Compare traditional machine-learning models with a feedforward neural network.
 - Explore wavelet time scattering as a robust ECG feature-extraction method.
 - Practice reproducible experimentation through centralized random seeding.
+- Familiarize myself with MATLAB
 
 ## Workflow
 
