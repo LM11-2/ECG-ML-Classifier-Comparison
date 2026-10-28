@@ -2,45 +2,44 @@
 
 > My personal project comparing machine-learning classifiers for electrocardiogram (ECG) signal classification.
 
-## Overview
+## Project Overview
 
 This project compares several machine-learning classifiers for distinguishing ECG signals across three classes:
 
-- **ARR** — arrhythmia
-- **CHF** — congestive heart failure
-- **NSR** — normal sinus rhythm
+- **ARR** — Arrhythmia
+- **CHF** — Congestive Heart Failure
+- **NSR** — Normal Sinus Rhythm
 
-The workflow preprocesses raw ECG recordings, extracts features with a wavelet time scattering transform, trains multiple classifiers, and compares their performance. The models included are a support vector machine, random forest, k-nearest neighbors, Naive Bayes classifier, and feedforward neural network.
+The pipeline preprocesses raw ECG recordings, extracts features with a wavelet time scattering transform, trains multiple classifiers, and compares their performance. The models included are a support vector machine, random forest, k-nearest neighbors, Naive Bayes classifier, and feedforward neural network, and further information can be found in the [Analysis.md](Analysis.md).
 
-This is an independent student portfolio project that grew out of the ideas in MathWorks' [Wavelet Time Scattering for ECG Signal Classification](https://www.mathworks.com/help/wavelet/ug/ecg-signal-classification-using-wavelet-time-scattering.html) example.
+This my independent student portfolio project that spun out of MathWorks' [Wavelet Time Scattering for ECG Signal Classification](https://www.mathworks.com/help/wavelet/ug/ecg-signal-classification-using-wavelet-time-scattering.html) example.
 
 ## Project Goals
 
 - Build an end-to-end ECG classification workflow in MATLAB.
-- Compare traditional machine-learning models with a feedforward neural network.
-- Explore wavelet time scattering as a robust ECG feature-extraction method.
-- Practice reproducible experimentation through centralized random seeding.
-- Familiarize myself with MATLAB
+- Compare traditional machine-learning models and feedforward neural network.
+- Explore wavelet time scattering as an ECG feature-extraction method.
+- Improve my MATLAB proficiency
 
 ## Workflow
 
-1. Select a folder containing the raw ECG recordings.
+1. Select folder containing the raw ECG recordings (see sourcing information below).
 2. Preprocess recordings to a common sampling rate and length.
 3. Split the recordings into training and test sets.
 4. Extract wavelet time scattering features.
 5. Train and evaluate each classifier.
 6. Aggregate window-level predictions into record-level predictions using majority vote.
-7. Compare results with summary tables, confusion matrices, and neural-network training curves.
+7. Observe and analyze results with summary tables, confusion matrices, and neural-network training curves.
 
 ## Repository Guide
 
 | File | Purpose |
 | --- | --- |
-| `main.m` | Main entry point. Selects the raw-signal folder, runs preprocessing, extracts features, trains models, and displays results. |
+| `main.m` | Main entry point. Selects the raw-signal folder, runs preprocessing, extracts features, trains models, and displays results. Run this file to observe the comprehensive project.|
 | `ECGPreprocessor.m` | Class for loading and standardizing ECG recordings from the selected data folder. |
 | `SVMClassifier.m` | Trains and evaluates the support vector machine classifier. |
 | `RandForestClassifier.m` | Trains and evaluates the random forest classifier. |
-| `KNNClassifier.m` | Trains and evaluates the k-nearest neighbors classifier. |
+| `KNNClassifier.m` | Trains and evaluates the k-Nearest Neighbors classifier. |
 | `NaiveBayesClassifier.m` | Trains and evaluates the Naive Bayes classifier. |
 | `NeuralNetClassifier4.m` | Trains and evaluates the feedforward neural network. |
 | `randomSplit.m` | Creates a reproducible training/test split. |
@@ -50,19 +49,20 @@ This is an independent student portfolio project that grew out of the ideas in M
 | `plotConfusionMatrices.m` | Creates confusion-matrix visualizations for each model. |
 | `plotNNTrainingCurves.m` | Visualizes neural-network training and validation progress. |
 | `DownloadInstructions.txt` | Explains how to download and organize the required raw ECG data. |
-| `Analysis.txt` | Notes on analysis, validation, and limitations. |
+| `Analysis.md` | Analysis on the project, including validation, limitations and areas of future improvement. |
 | `Past Versions/` | Archived project iterations and unused classifier versions. |
 
 ## Requirements
 
 This project was developed in MATLAB. Before running it, install or configure:
 
-- MATLAB **[add tested release, for example: R20XXx]**
+- MATLAB (created in version R2026a Update 3)
 - Wavelet Toolbox
 - Statistics and Machine Learning Toolbox
 - Deep Learning Toolbox
 - Signal Processing Toolbox
-- A MATLAB-compatible WFDB reader that provides `rdsamp` **[add installation link or instructions]**
+- Waveform Database Software Package (WFDB) for MATLAB and Octave
+    - Instructions can be found in [DownloadInstructions.txt](DownloadInstructions.txt)
 
 ## Data Setup
 
@@ -82,13 +82,13 @@ The source data originates from PhysioNet databases. Preserve the required data 
 ## How to Run
 
 1. Clone or download this repository.
-2. Install the required MATLAB toolboxes and configure `rdsamp`.
+2. Install the required MATLAB toolboxes.
 3. Open MATLAB in the project folder.
 4. Run `main.m`.
 5. Select the parent folder containing the raw ECG data when prompted.
-6. Review the printed model summary and generated visualizations.
+6. Review the printed model summary and visualizations.
 
-The random seed is declared near the top of `main.m` so that the training/test split, cross-validation, visualization sampling, and neural-network validation split can be reproduced.
+A random seed is declared near the top of `main.m` so that the training/test split, cross-validation, visualization sampling, and neural-network validation split can be reproduced.
 
 ## Results
 
@@ -104,32 +104,23 @@ The random seed is declared near the top of `main.m` so that the training/test s
 
 **Key takeaway:** **[Summarize your most important finding here.]**
 
-<!-- Add selected figures below, for example a confusion matrix or training curve. -->
 
-## Validation and Limitations
-
-This is an exploratory educational project, not a clinical diagnostic system. Evaluation choices, possible sources of bias, and interpretation limits should be considered alongside model metrics. See [Analysis.txt](Analysis.txt) for the current analysis notes.
-
-**Validation approach:** **[Describe the final train/test split and cross-validation approach.]**
-
-**Known limitations:** **[Add the limitations and planned improvements from your analysis.]**
-
-## Future Improvements
-
-- **[Add a planned technical improvement.]**
-- **[Add a planned validation or data improvement.]**
-- **[Add a planned presentation or documentation improvement.]**
 
 ## Attribution
 
 The project was inspired by MathWorks' [Wavelet Time Scattering for ECG Signal Classification](https://www.mathworks.com/help/wavelet/ug/ecg-signal-classification-using-wavelet-time-scattering.html) example. The ECG source data is obtained from PhysioNet; dataset-specific citations and license information should be retained with the data setup materials.
 
+### Software Citation
+
+This project uses the Waveform Database Software Package (WFDB) for MATLAB and Octave to read WFDB-formatted ECG recordings through `rdsamp`.
+
+Silva, I., Moody, B., & Moody, G. (2021). *Waveform Database Software Package (WFDB) for MATLAB and Octave* (version 0.10.0). PhysioNet. RRID:SCR_007345. [https://doi.org/10.13026/6zcz-e163](https://doi.org/10.13026/6zcz-e163)
+
 ## Author
 
-**[Your Name]**  
-Student portfolio project  
-**[Add your program, school, LinkedIn, or portfolio link]**
+**Luke Mehta**  
+*BME + CS, Johns Hopkins University*
 
 ## License
 
-**[Choose and add a license for your original code before publishing.]**
+This project's original code is released under the MIT License. The external datasets and WFDB software retain their own licenses, citation requirements, and terms of use.

@@ -16,3 +16,27 @@
    - Length: 1 Hour
    - Time format: Samples
    - Data format: Standard
+
+4. Install the WFDB Toolbox for MATLAB and Octave:
+   This project uses the toolbox's rdsamp function to read the WFDB records.
+
+   a. Open MATLAB and change to a folder where you want to install the
+      toolbox. Do not install it inside this project or the raw-data folder.
+
+   b. Run the following commands in the MATLAB Command Window:
+
+      old_path = which('rdsamp');
+      if ~isempty(old_path), rmpath(old_path(1:end-8)); end
+      wfdb_url = 'https://physionet.org/physiotools/matlab/wfdb-app-matlab/wfdb-app-toolbox-0-10-0.zip';
+      [~, status] = urlwrite(wfdb_url, 'wfdb-app-toolbox-0-10-0.zip');
+      assert(status == 1, 'WFDB Toolbox download failed.');
+      unzip('wfdb-app-toolbox-0-10-0.zip');
+      cd mcode
+      addpath(pwd)
+      savepath
+
+   c. Verify that MATLAB can find the required reader:
+
+      which rdsamp
+
+      MATLAB should display the path to rdsamp.m.
