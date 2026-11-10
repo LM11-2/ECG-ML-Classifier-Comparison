@@ -12,7 +12,7 @@ This project compares several machine-learning classifiers for distinguishing EC
 
 The pipeline preprocesses raw ECG recordings, extracts features with a wavelet time scattering transform, trains multiple classifiers, and compares their performance. The models included are a support vector machine, random forest, k-nearest neighbors, Naive Bayes classifier, and feedforward neural network, and further information can be found in the [Analysis.md](Analysis.md).
 
-This my independent student portfolio project that spun out of MathWorks' [Wavelet Time Scattering for ECG Signal Classification](https://www.mathworks.com/help/wavelet/ug/ecg-signal-classification-using-wavelet-time-scattering.html) example.
+This is my independent student portfolio project that spun out of MathWorks' [Wavelet Time Scattering for ECG Signal Classification](https://www.mathworks.com/help/wavelet/ug/ecg-signal-classification-using-wavelet-time-scattering.html) example.
 
 ## Project Goals
 
@@ -52,6 +52,22 @@ This my independent student portfolio project that spun out of MathWorks' [Wavel
 | `Analysis.md` | Analysis on the project, including validation, limitations and areas of future improvement. |
 | `Past Versions/` | Archived project iterations and unused classifier versions. |
 
+## Results
+
+For detailed results, runtime comparisons, figures, validation methodology, and limitations, see [Analysis.md](Analysis.md).
+
+| Model | Test Accuracy | Macro F1 Score |
+| --- | ---: | ---: |
+| Feed Forward Neural Network (16-8-3) | 95.833% | 0.95147 |
+| Random Forest | 93.750% | 0.92423 |
+| SVM | 93.750% | 0.91381 |
+| K-Nearest Neighbors | 85.417% | 0.84152 |
+| Naive Bayes | 70.833% | 0.69199 |
+
+![Confusion matrices for all classifiers](Images/Confusion_Matrices.png)
+
+Figure 1. Confusion matrices for the five evaluated classifiers.
+
 ## Requirements
 
 This project was developed in MATLAB. Before running it, install or configure:
@@ -90,19 +106,7 @@ The source data originates from PhysioNet databases. Preserve the required data 
 
 A random seed is declared near the top of `main.m` so that the training/test split, cross-validation, visualization sampling, and neural-network validation split can be reproduced.
 
-## Results
 
-<!-- Replace the placeholders below after running the finalized analysis. -->
-
-| Model | Test Accuracy | Macro F1 Score | Notes |
-| --- | --- | --- | --- |
-| Support Vector Machine | **[add result]** | **[add result]** | **[add observation]** |
-| Random Forest | **[add result]** | **[add result]** | **[add observation]** |
-| K-Nearest Neighbors | **[add result]** | **[add result]** | **[add observation]** |
-| Naive Bayes | **[add result]** | **[add result]** | **[add observation]** |
-| Feedforward Neural Network | **[add result]** | **[add result]** | **[add observation]** |
-
-**Key takeaway:** **[Summarize your most important finding here.]**
 
 
 
