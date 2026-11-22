@@ -1,21 +1,19 @@
-=== PhysioNet Data Download Instructions ===
+ECG Data and WFDB Setup Instructions
 
-1. Create folder structure:
-   rawdata/
+1. Create a parent folder for the raw data. Its name is your choice:
+   your-data-folder/
    ├── mitdb/   (MIT-BIH Arrhythmia)
    ├── chfdb/   (BIDMC CHF)
    └── nsrdb/   (MIT-BIH Normal Sinus Rhythm)
 
-2. Download from PhysioNet ATM:
+2. Download the WFDB-format record files from these PhysioNet database pages,
+   then extract each database into its matching subfolder above:
    MIT-BIH Arrhythmia: https://physionet.org/content/mitdb/1.0.0/
    BIDMC Congestive Heart Failure: https://physionet.org/content/chfdb/1.0.0/
    Normal Sinus Rhythm (nsrdb): https://physionet.org/content/nsrdb/1.0.0/
 
-
-3. Settings:
-   - Length: 1 Hour
-   - Time format: Samples
-   - Data format: Standard
+3. Verify each subfolder contains the downloaded .dat files and their matching
+   .hea header files. When main.m prompts for a folder, select your-data-folder.
 
 4. Install the WFDB Toolbox for MATLAB and Octave:
    This project uses the toolbox's rdsamp function to read the WFDB records.

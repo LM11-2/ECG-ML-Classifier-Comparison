@@ -17,23 +17,23 @@ This is my independent student portfolio project that spun out of MathWorks' [Wa
 ## Project Goals
 
 - Build an end-to-end ECG classification workflow in MATLAB.
-- Compare traditional machine-learning models and feedforward neural network.
+- Compare traditional machine-learning models and a feedforward neural network.
 - Explore wavelet time scattering as an ECG feature-extraction method.
 - Improve my MATLAB proficiency
 
 ## Workflow
 
-1. Select folder containing the raw ECG recordings (see sourcing information below).
-2. Preprocess recordings to a common sampling rate and length.
-3. Split the recordings into training and test sets.
+1. Select the parent folder containing the raw ECG recordings (see sourcing information below).
+2. Preprocess each ECG channel to a common sampling rate and length.
+3. Split the processed ECG channels into training and test sets.
 4. Extract wavelet time scattering features.
 5. Train and evaluate each classifier.
-6. Aggregate window-level predictions into record-level predictions using majority vote.
+6. Aggregate window-level predictions into one prediction per processed ECG channel using majority vote.
 7. Observe and analyze results with summary tables, confusion matrices, and neural-network training curves.
 
 ## Repository Guide
 
-| File | Purpose |
+| File | What's Inside |
 | --- | --- |
 | `main.m` | Main entry point. Selects the raw-signal folder, runs preprocessing, extracts features, trains models, and displays results. Run this file to observe the comprehensive project.|
 | `ECGPreprocessor.m` | Class for loading and standardizing ECG recordings from the selected data folder. |
@@ -41,16 +41,20 @@ This is my independent student portfolio project that spun out of MathWorks' [Wa
 | `RandForestClassifier.m` | Trains and evaluates the random forest classifier. |
 | `KNNClassifier.m` | Trains and evaluates the k-Nearest Neighbors classifier. |
 | `NaiveBayesClassifier.m` | Trains and evaluates the Naive Bayes classifier. |
-| `NeuralNetClassifier4.m` | Trains and evaluates the feedforward neural network. |
+| `FeedForwardNeuralNetClassifier.m` | Trains and evaluates the feedforward neural network. |
 | `randomSplit.m` | Creates a reproducible training/test split. |
+| `unpackData.m` | Extracts the signal matrix and labels from the preprocessed dataset. |
 | `createSequenceLabels.m` | Matches labels to wavelet-scattering time windows. |
-| `helperMajorityVote.m` | Combines window-level predictions into one prediction per ECG record. |
+| `helperMajorityVote.m` | Combines window-level predictions into one prediction per processed ECG channel. |
+| `groupedCrossValidation.m` | Performs SVM cross-validation while keeping all windows from a processed ECG channel in the same fold. |
+| `computeClassificationMetrics.m` | Calculates accuracy, class-level metrics, and macro-averaged scores. |
 | `displayResults.m` | Ranks and prints classifier results. |
 | `plotConfusionMatrices.m` | Creates confusion-matrix visualizations for each model. |
 | `plotNNTrainingCurves.m` | Visualizes neural-network training and validation progress. |
-| `DownloadInstructions.txt` | Explains how to download and organize the required raw ECG data. |
+| `DownloadInstructions.txt` | Instructions on how to download and arrange the datafiles, as well as install the Waveform Database toolbox.|
 | `Analysis.md` | Analysis on the project, including validation, limitations and areas of future improvement. |
-| `Past Versions/` | Archived project iterations and unused classifier versions. |
+| `Images/` | Saved figures used in the README and analysis. |
+| `Past Versions_prototype/` | Archived prototype code and unused classifier versions. |
 
 ## Results
 
@@ -82,7 +86,7 @@ This project was developed in MATLAB. Before running it, install or configure:
 
 ## Data Setup
 
-Raw ECG data is not required to be stored in the repository. Follow [DownloadInstructions.txt](DownloadInstructions.txt) to download and arrange the source data.
+Raw ECG data is not included in this repository. Follow [DownloadInstructions.txt](DownloadInstructions.txt) to download the data, arrange it locally, and install the WFDB toolbox.
 
 When prompted by `main.m`, select the parent folder containing these subfolders:
 
@@ -93,22 +97,19 @@ your-data-folder/
 └── nsrdb/
 ```
 
-The source data originates from PhysioNet databases. Preserve the required data licenses and attributions when obtaining or using the files.
+The source data originates from the [MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/), [BIDMC Congestive Heart Failure Database](https://physionet.org/content/chfdb/1.0.0/), and [MIT-BIH Normal Sinus Rhythm Database](https://physionet.org/content/nsrdb/1.0.0/). Preserve the required data licenses and attributions when obtaining or using the files.
 
 ## How to Run
 
 1. Clone or download this repository.
-2. Install the required MATLAB toolboxes.
-3. Open MATLAB in the project folder.
-4. Run `main.m`.
-5. Select the parent folder containing the raw ECG data when prompted.
-6. Review the printed model summary and visualizations.
+2. Install the required MATLAB toolboxes and the WFDB toolbox using [DownloadInstructions.txt](DownloadInstructions.txt).
+3. Download and arrange the source data as described in [DownloadInstructions.txt](DownloadInstructions.txt).
+4. Open MATLAB in the project folder.
+5. Run `main.m`.
+6. Select the parent folder containing the raw ECG data when prompted.
+7. Review the printed model summary and visualizations.
 
 A random seed is declared near the top of `main.m` so that the training/test split, cross-validation, visualization sampling, and neural-network validation split can be reproduced.
-
-
-
-
 
 ## Attribution
 
