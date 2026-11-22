@@ -32,3 +32,10 @@ codegen/
 
 # Cloud based storage dotfile
 .MATLABDriveTag
+
+# Project-specific data and outputs
+Raw-Signals/
+ECGData/
+Outputs/
+*.zip
+*.mat
